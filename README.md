@@ -6,10 +6,10 @@ Benchmarks for ECMAScript parsers compiled to native binaries (Zig, Rust), measu
 
 | Property | Value |
 |----------|-------|
-| OS | macOS 25.6.0 (arm64) |
-| CPU | Apple M3 |
-| Cores | 8 |
-| Memory | 16 GB |
+| OS | macOS 24.6.0 (arm64) |
+| CPU | Apple M3 Pro |
+| Cores | 12 |
+| Memory | 36 GB |
 
 ## Parsers
 
@@ -41,9 +41,9 @@ An extensible Rust-based platform for compiling and bundling JavaScript and Type
 
 | Parser | Median | Min | p99 | Relative |
 |--------|--------|-----|-----|----------|
-| Yuku | 20.30 ms | 20.16 ms | 20.87 ms | 1.00× |
-| Oxc | 24.37 ms | 23.89 ms | 25.94 ms | 1.20× |
-| SWC | 42.37 ms | 41.59 ms | 45.22 ms | 2.09× |
+| Yuku | 19.06 ms | 18.46 ms | 20.37 ms | 1.00× |
+| Oxc | 25.52 ms | 24.88 ms | 27.80 ms | 1.34× |
+| SWC | 44.59 ms | 43.71 ms | 50.96 ms | 2.34× |
 
 ### [checker.ts](https://raw.githubusercontent.com/yuku-toolchain/parser-benchmark-files/refs/heads/main/checker.ts)
 
@@ -53,9 +53,9 @@ An extensible Rust-based platform for compiling and bundling JavaScript and Type
 
 | Parser | Median | Min | p99 | Relative |
 |--------|--------|-----|-----|----------|
-| Yuku | 6.74 ms | 6.70 ms | 6.99 ms | 1.00× |
-| Oxc | 7.84 ms | 7.74 ms | 8.25 ms | 1.16× |
-| SWC | 13.71 ms | 13.39 ms | 14.87 ms | 2.03× |
+| Yuku | 6.84 ms | 6.45 ms | 7.11 ms | 1.00× |
+| Oxc | 8.59 ms | 7.95 ms | 9.43 ms | 1.26× |
+| SWC | 14.73 ms | 14.40 ms | 15.07 ms | 2.15× |
 
 ### [lib.dom.d.ts](https://raw.githubusercontent.com/yuku-toolchain/parser-benchmark-files/refs/heads/main/lib.dom.d.ts)
 
@@ -65,9 +65,9 @@ An extensible Rust-based platform for compiling and bundling JavaScript and Type
 
 | Parser | Median | Min | p99 | Relative |
 |--------|--------|-----|-----|----------|
-| Oxc | 2.32 ms | 2.31 ms | 2.42 ms | 1.00× |
-| Yuku | 2.37 ms | 2.36 ms | 2.42 ms | 1.02× |
-| SWC | 4.90 ms | 4.77 ms | 5.17 ms | 2.11× |
+| Oxc | 2.39 ms | 2.33 ms | 3.04 ms | 1.00× |
+| Yuku | 3.33 ms | 3.09 ms | 3.81 ms | 1.39× |
+| SWC | 5.05 ms | 4.83 ms | 5.96 ms | 2.11× |
 
 ### [react.js](https://raw.githubusercontent.com/yuku-toolchain/parser-benchmark-files/refs/heads/main/react.js)
 
@@ -77,9 +77,9 @@ An extensible Rust-based platform for compiling and bundling JavaScript and Type
 
 | Parser | Median | Min | p99 | Relative |
 |--------|--------|-----|-----|----------|
-| Yuku | 0.12 ms | 0.12 ms | 0.14 ms | 1.00× |
-| Oxc | 0.16 ms | 0.16 ms | 0.18 ms | 1.34× |
-| SWC | 0.28 ms | 0.27 ms | 0.38 ms | 2.37× |
+| Yuku | 0.12 ms | 0.11 ms | 0.14 ms | 1.00× |
+| Oxc | 0.17 ms | 0.16 ms | 0.24 ms | 1.43× |
+| SWC | 0.30 ms | 0.29 ms | 1.70 ms | 2.53× |
 
 ## Semantic
 
@@ -95,8 +95,8 @@ The benchmarks below measure parsing followed by this additional pass, which bui
 
 | Parser | Median | Min | p99 | Relative |
 |--------|--------|-----|-----|----------|
-| Yuku + Semantic | 44.97 ms | 44.13 ms | 53.25 ms | 1.00× |
-| Oxc + Semantic | 55.77 ms | 54.24 ms | 67.82 ms | 1.24× |
+| Yuku + Semantic | 43.12 ms | 41.78 ms | 58.15 ms | 1.00× |
+| Oxc + Semantic | 57.25 ms | 55.66 ms | 61.20 ms | 1.33× |
 
 ### [checker.ts](https://raw.githubusercontent.com/yuku-toolchain/parser-benchmark-files/refs/heads/main/checker.ts)
 
@@ -104,8 +104,8 @@ The benchmarks below measure parsing followed by this additional pass, which bui
 
 | Parser | Median | Min | p99 | Relative |
 |--------|--------|-----|-----|----------|
-| Yuku + Semantic | 15.61 ms | 15.44 ms | 16.29 ms | 1.00× |
-| Oxc + Semantic | 18.30 ms | 18.14 ms | 19.12 ms | 1.17× |
+| Yuku + Semantic | 15.29 ms | 14.65 ms | 17.15 ms | 1.00× |
+| Oxc + Semantic | 19.03 ms | 18.72 ms | 20.53 ms | 1.24× |
 
 ### [lib.dom.d.ts](https://raw.githubusercontent.com/yuku-toolchain/parser-benchmark-files/refs/heads/main/lib.dom.d.ts)
 
@@ -113,8 +113,8 @@ The benchmarks below measure parsing followed by this additional pass, which bui
 
 | Parser | Median | Min | p99 | Relative |
 |--------|--------|-----|-----|----------|
-| Yuku + Semantic | 4.39 ms | 4.36 ms | 4.50 ms | 1.00× |
-| Oxc + Semantic | 4.69 ms | 4.59 ms | 7.54 ms | 1.07× |
+| Oxc + Semantic | 4.83 ms | 4.64 ms | 6.44 ms | 1.00× |
+| Yuku + Semantic | 5.38 ms | 5.16 ms | 5.91 ms | 1.11× |
 
 ### [react.js](https://raw.githubusercontent.com/yuku-toolchain/parser-benchmark-files/refs/heads/main/react.js)
 
@@ -122,8 +122,8 @@ The benchmarks below measure parsing followed by this additional pass, which bui
 
 | Parser | Median | Min | p99 | Relative |
 |--------|--------|-----|-----|----------|
-| Yuku + Semantic | 0.27 ms | 0.27 ms | 0.28 ms | 1.00× |
-| Oxc + Semantic | 0.35 ms | 0.34 ms | 0.46 ms | 1.29× |
+| Yuku + Semantic | 0.27 ms | 0.26 ms | 0.31 ms | 1.00× |
+| Oxc + Semantic | 0.35 ms | 0.34 ms | 0.40 ms | 1.30× |
 
 ## Run Benchmarks
 
@@ -148,25 +148,13 @@ cd ecmascript-parser-benchmark-native
 bun install
 ```
 
-3. Download the benchmark files:
-
-```bash
-bun load-files
-```
-
-4. Build the parsers:
-
-```bash
-bun run build
-```
-
-5. Run benchmarks:
+3. Run benchmarks:
 
 ```bash
 bun bench
 ```
 
-This will run benchmarks on all test files. Results are saved to the `result/` directory.
+This will build all parsers and run benchmarks on all test files. Results are saved to the `result/` directory.
 
 ## Methodology
 
