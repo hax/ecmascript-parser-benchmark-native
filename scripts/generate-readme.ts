@@ -398,13 +398,25 @@ cd ecmascript-parser-benchmark-native
 bun install
 \`\`\`
 
-3. Run benchmarks:
+3. Download the benchmark files:
+
+\`\`\`bash
+bun load-files
+\`\`\`
+
+4. Build the parsers:
+
+\`\`\`bash
+bun run build
+\`\`\`
+
+5. Run benchmarks:
 
 \`\`\`bash
 bun bench
 \`\`\`
 
-This will build all parsers and run benchmarks on all test files. Results are saved to the \`result/\` directory.`;
+This will run benchmarks on all test files. Results are saved to the \`result/\` directory.`;
 }
 
 function generateMethodologySection(): string {
