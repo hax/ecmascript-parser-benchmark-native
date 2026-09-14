@@ -64,6 +64,10 @@ const FILES = {
     path: "files/checker.ts",
     source_url: `${FILES_SOURCE_URL_PREFIX}/checker.ts`,
   },
+  lib_dom: {
+    path: "files/lib.dom.d.ts",
+    source_url: `${FILES_SOURCE_URL_PREFIX}/lib.dom.d.ts`,
+  },
   react: {
     path: "files/react.js",
     source_url: `${FILES_SOURCE_URL_PREFIX}/react.js`,

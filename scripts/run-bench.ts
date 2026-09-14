@@ -4,6 +4,7 @@ import { join } from "node:path";
 const FILES = [
   { key: "typescript", path: "files/typescript.js" },
   { key: "checker", path: "files/checker.ts" },
+  { key: "lib_dom", path: "files/lib.dom.d.ts" },
   { key: "react", path: "files/react.js" },
 ] as const;
 
