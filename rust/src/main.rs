@@ -72,15 +72,19 @@ fn bench_oxc_semantic(src: &str, st: SourceType) -> Stats {
     })
 }
 
-fn bench_swc(src: &str, syntax: Syntax) -> Stats {
-    measure(|| {
+fn bench_swc(src: &str, syntax: Syntax) -> Option<Stats> {
+    let input = StringInput::new(src, BytePos(0), BytePos(src.len() as u32));
+    if SwcParser::new(syntax, input, None).parse_module().is_err() {
+        return None;
+    }
+    Some(measure(|| {
         let input = StringInput::new(src, BytePos(0), BytePos(src.len() as u32));
         let start = Instant::now();
         let module = SwcParser::new(syntax, black_box(input), None).parse_module();
         let dt = start.elapsed().as_nanos() as u64;
         black_box(&module);
         dt
-    })
+    }))
 }
 
 fn main() {
@@ -96,12 +100,19 @@ fn main() {
             }
         };
         let st = SourceType::from_path(&path).unwrap();
-        let cases = [
-            ("oxc", bench_oxc(&source, st)),
-            ("oxc_semantic", bench_oxc_semantic(&source, st)),
+        let cases: [( &str, Option<Stats> ); 3] = [
+            ("oxc", Some(bench_oxc(&source, st))),
+            ("oxc_semantic", Some(bench_oxc_semantic(&source, st))),
             ("swc", bench_swc(&source, swc_syntax(&path))),
         ];
         for (parser, s) in cases {
+            let s = match s {
+                Some(s) => s,
+                None => {
+                    eprintln!("rust: {parser} failed to parse {path}");
+                    continue;
+                }
+            };
             if !first {
                 out.push(',');
             }

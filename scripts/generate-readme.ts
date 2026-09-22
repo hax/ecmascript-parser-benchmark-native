@@ -6,6 +6,8 @@ import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 
 const FILES_SOURCE_URL_PREFIX =
   "https://raw.githubusercontent.com/yuku-toolchain/parser-benchmark-files/refs/heads/main";
+const SAMPLES_SOURCE_URL_PREFIX =
+  "https://raw.githubusercontent.com/hax/parser-benchmark-files/refs/heads/expanded-samples/samples";
 
 const PARSERS = {
   yuku: {
@@ -72,7 +74,112 @@ const FILES = {
     path: "files/react.js",
     source_url: `${FILES_SOURCE_URL_PREFIX}/react.js`,
   },
+  angular_all_mjs: {
+    path: "files/samples/angular-all.mjs",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/angular-all.mjs`,
+  },
+  antd_components_tsx: {
+    path: "files/samples/antd-components.tsx",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/antd-components.tsx`,
+  },
+  checker516: {
+    path: "files/samples/checker516.ts",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/checker516.ts`,
+  },
+  class_dense: {
+    path: "files/samples/class-dense.js",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/class-dense.js`,
+  },
+  core_js: {
+    path: "files/samples/core-js.js",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/core-js.js`,
+  },
+  d3_src: {
+    path: "files/samples/d3-src.js",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/d3-src.js`,
+  },
+  effect_src: {
+    path: "files/samples/effect-src.ts",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/effect-src.ts`,
+  },
+  express: {
+    path: "files/samples/express.js",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/express.js`,
+  },
+  formatjs_icu: {
+    path: "files/samples/formatjs-icu.ts",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/formatjs-icu.ts`,
+  },
+  ghost_server: {
+    path: "files/samples/ghost-server.js",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/ghost-server.js`,
+  },
+  highlightjs_languages: {
+    path: "files/samples/highlightjs-languages.js",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/highlightjs-languages.js`,
+  },
+  i18next_src: {
+    path: "files/samples/i18next-src.js",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/i18next-src.js`,
+  },
+  libdom516: {
+    path: "files/samples/libdom516.d.ts",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/libdom516.d.ts`,
+  },
+  lodash_es: {
+    path: "files/samples/lodash-es.js",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/lodash-es.js`,
+  },
+  nest_core: {
+    path: "files/samples/nest-core.ts",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/nest-core.ts`,
+  },
+  opencode: {
+    path: "files/samples/opencode.ts",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/opencode.ts`,
+  },
+  pd_dense: {
+    path: "files/samples/pd-dense.ts",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/pd-dense.ts`,
+  },
+  react_dom_production_min: {
+    path: "files/samples/react-dom.production.min.js",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/react-dom.production.min.js`,
+  },
+  react1702: {
+    path: "files/samples/react1702.js",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/react1702.js`,
+  },
+  ref_acorn: {
+    path: "files/samples/ref-acorn.js",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/ref-acorn.js`,
+  },
+  ref_assemblyscript: {
+    path: "files/samples/ref-assemblyscript.ts",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/ref-assemblyscript.ts`,
+  },
+  ref_babel: {
+    path: "files/samples/ref-babel.ts",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/ref-babel.ts`,
+  },
+  ts_pattern: {
+    path: "files/samples/ts-pattern.ts",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/ts-pattern.ts`,
+  },
+  vue_src: {
+    path: "files/samples/vue-src.ts",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/vue-src.ts`,
+  },
+  zod_src: {
+    path: "files/samples/zod-src.ts",
+    source_url: `${SAMPLES_SOURCE_URL_PREFIX}/zod-src.ts`,
+  },
 } as const;
+
+const OFFICIAL_FILE_KEYS = ["typescript", "checker", "lib_dom", "react"] as const;
+const SAMPLE_FILE_KEYS = Object.keys(FILES).filter(
+  (key): key is FileKey => !(OFFICIAL_FILE_KEYS as readonly string[]).includes(key),
+);
 
 type ParserKey = keyof typeof PARSERS;
 type FileKey = keyof typeof FILES;
@@ -265,11 +372,11 @@ function generateTable(entries: ParserEntry[]): string {
   return lines.join("\n");
 }
 
-async function generateBenchmarksSection(): Promise<string> {
+async function generateBenchmarksSection(fileKeys: readonly FileKey[]): Promise<string> {
   const lines = ["## Benchmarks", ""];
 
-  for (const [key, file] of Object.entries(FILES)) {
-    const fileKey = key as FileKey;
+  for (const fileKey of fileKeys) {
+    const file = FILES[fileKey];
     const fileName = file.path.split("/").pop()!;
     const fileSize = (await stat(join(process.cwd(), file.path))).size;
     const data = await readBenchmarkResults(fileKey);
@@ -293,7 +400,7 @@ async function generateBenchmarksSection(): Promise<string> {
   return lines.join("\n");
 }
 
-async function generateSemanticSection(): Promise<string> {
+async function generateSemanticSection(fileKeys: readonly FileKey[]): Promise<string> {
   const lines: string[] = [];
 
   lines.push(`## Semantic`);
@@ -311,8 +418,8 @@ async function generateSemanticSection(): Promise<string> {
   );
   lines.push("");
 
-  for (const [key, file] of Object.entries(FILES)) {
-    const fileKey = key as FileKey;
+  for (const fileKey of fileKeys) {
+    const file = FILES[fileKey];
     const fileName = file.path.split("/").pop()!;
     const fileSize = (await stat(join(process.cwd(), file.path))).size;
     const data = await readBenchmarkResults(fileKey);
@@ -438,8 +545,8 @@ async function main() {
     getSystemInfo(),
     "",
     generateParsersSection(),
-    await generateBenchmarksSection(),
-    await generateSemanticSection(),
+    await generateBenchmarksSection(OFFICIAL_FILE_KEYS),
+    await generateSemanticSection(OFFICIAL_FILE_KEYS),
     generateRunSection(),
     "",
     generateMethodologySection(),
@@ -447,6 +554,23 @@ async function main() {
 
   await writeFile(join(process.cwd(), "README.md"), readme);
   console.log("README.md generated successfully!");
+
+  const samples = [
+    "# Native ECMAScript Parser Benchmark — Extended Samples",
+    "",
+    "Benchmarks on the extended sample set from [hax/parser-benchmark-files](https://github.com/hax/parser-benchmark-files) `expanded-samples` branch. Same parsers, same methodology as the main benchmark — see [README.md](README.md) for details.",
+    "",
+    getSystemInfo(),
+    "",
+    generateParsersSection(),
+    await generateBenchmarksSection(SAMPLE_FILE_KEYS),
+    await generateSemanticSection(SAMPLE_FILE_KEYS),
+    "",
+    generateMethodologySection(),
+  ].join("\n");
+
+  await writeFile(join(process.cwd(), "SAMPLES.md"), samples);
+  console.log("SAMPLES.md generated successfully!");
 }
 
 main().catch(console.error);
